@@ -1,6 +1,7 @@
 package com.whistlehub
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,16 @@ import com.whistlehub.common.ui.theme.WhistleHubTheme
 import com.whistlehub.common.ui.typography.Pretendard
 
 class MainActivity : ComponentActivity() {
+    private external fun startAudioEngine(): Int
+    private external fun stopAudioEngine(): Int
+
+    companion object {
+        init {
+            System.loadLibrary("whistlehub")
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,6 +43,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        val result = startAudioEngine()
+        if (result == 0) {
+            Log.d("MainActivity", "Audio engine started successfully")
+        } else {
+            Log.e("MainActivity", "Audio engine failed to start")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopAudioEngine()
     }
 }
 

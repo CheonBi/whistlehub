@@ -17,6 +17,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags("-std=c++2a")
+                arguments("-DANDROID_STL=c++_shared")
+            }
+        }
     }
 
     buildTypes {
@@ -37,6 +43,13 @@ android {
     }
     buildFeatures {
         compose = true
+        prefab = true
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 }
 
@@ -51,13 +64,18 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material.icons.extended)     // Material Icons Extended (Compose BOM 사용 시 버전 관리는 BOM에 포함)
     implementation(libs.retrofit)     // Retrofit
+    implementation(libs.java.jwt)
     implementation(libs.converter.gson)     // Retrofit
     ksp(libs.androidx.room.compiler)     // Room
     implementation(libs.androidx.room.runtime)     // Room
     implementation(libs.androidx.room.ktx)     // Room
     implementation(libs.androidx.datastore.preferences)     // DataStore
     implementation(libs.androidx.navigation.compose)     // Navigation Compose
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.oboe)     // Oboe (NDK/CMake 설정 필요)
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.session)
+
     // Superpowered: 직접 SDK 다운로드 및 통합 (Gradle 의존성으로 추가되지 않음)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
